@@ -1,4 +1,17 @@
+import datetime
+import os
+from threading import Event, Thread
+from uuid import uuid4
+
+import gradio as gr
+import requests
 import argparse
+
+import torch
+from peft import PeftModel
+from transformers import AutoModelForCausalLM, AutoTokenizer, StoppingCriteria, StoppingCriteriaList, TextIteratorStreamer
+
+from create_instruction import create_instruction
 
 # Create the argument parser
 parser = argparse.ArgumentParser()
@@ -9,15 +22,10 @@ parser.add_argument('--four-bit', action='store_true', help='Whether to use 4bit
 
 args = parser.parse_args()
 
-import torch
-from peft import PeftModel
-from transformers import AutoModelForCausalLM, AutoTokenizer, StoppingCriteria, StoppingCriteriaList, TextIteratorStreamer
 
-from create_instruction import create_instruction
-
-if args.model_name == 'vietcuna-3b':
+if args.model_name == 'vilm/vietcuna-3b':
     model_name = 'vilm/vietcuna-3b'
-elif args.model_name == 'vietcuna-7b':
+elif args.model_name == 'vilm/vietcuna-7b-alpha':
     model_name = 'vilm/vietcuna-7b-alpha'
 else:
     raise ValueError("Unsupported model_name. Please choose either 'vietcuna-3b' or 'vietcuna-7b'.")
@@ -38,13 +46,6 @@ stop_token_ids = [2]
 
 print(f"Successfully loaded the model {model_name} into memory")
 
-import datetime
-import os
-from threading import Event, Thread
-from uuid import uuid4
-
-import gradio as gr
-import requests
 
 max_new_tokens = 512 if model_name == 'vilm/vietcuna-3b' else 1024
 start_message = """Below is an instruction that describes a task.
@@ -260,8 +261,8 @@ with gr.Blocks(
 
     submit_event = msg.submit(
         fn=user,
-        inputs=[msg, chatbot],
-        outputs=[msg, chatbot],
+        inputs=[create_instruction(msg), chatbot],
+        outputs=[create_instruction(msg), chatbot],
         queue=False,
     ).then(
         fn=bot,
@@ -278,8 +279,8 @@ with gr.Blocks(
     )
     submit_click_event = submit.click(
         fn=user,
-        inputs=[msg, chatbot],
-        outputs=[msg, chatbot],
+        inputs=[create_instruction(msg), chatbot],
+        outputs=[create_instruction(msg), chatbot],
         queue=False,
     ).then(
         fn=bot,
@@ -304,4 +305,4 @@ with gr.Blocks(
     clear.click(lambda: None, None, chatbot, queue=False)
 
 demo.queue(max_size=128, concurrency_count=2)
-demo.launch()
+demo.launch(share=True)
