@@ -72,6 +72,7 @@ def convert_history_to_text(history):
     #         for item in history[:-1]
     #     ]
     # )
+    history = create_instruction(history)
     text += "".join(
         [
             "".join(
@@ -117,7 +118,7 @@ def bot(history, temperature, top_p, top_k, repetition_penalty, conversation_id)
     stop = StopOnTokens()
 
     # Construct the input message string for the model by concatenating the current system message and conversation history
-    messages = convert_history_to_text(history)
+    messages = convert_history_to_text(history[0][0])
 
     # Tokenize the messages string
     input_ids = tok(messages, return_tensors="pt").input_ids
@@ -261,8 +262,8 @@ with gr.Blocks(
 
     submit_event = msg.submit(
         fn=user,
-        inputs=[create_instruction(msg), chatbot],
-        outputs=[create_instruction(msg), chatbot],
+        inputs=[msg, chatbot],
+        outputs=[msg, chatbot],
         queue=False,
     ).then(
         fn=bot,
@@ -279,8 +280,8 @@ with gr.Blocks(
     )
     submit_click_event = submit.click(
         fn=user,
-        inputs=[create_instruction(msg), chatbot],
-        outputs=[create_instruction(msg), chatbot],
+        inputs=[msg, chatbot],
+        outputs=[msg, chatbot],
         queue=False,
     ).then(
         fn=bot,
