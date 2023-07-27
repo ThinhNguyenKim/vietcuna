@@ -5,7 +5,14 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 
-vietnamese_model = SentenceTransformer("models/VietnameseSimCSE")
+try:
+    vietnamese_model = SentenceTransformer('vietnamese_search/VietnameseSimCSE')
+    
+except:
+    vietnamese_model = SentenceTransformer('VoVanPhuc/sup-SimCSE-VietNamese-phobert-base')
+    vietnamese_model.save('model/VietnameseSimCSE')
+
+
 data = pd.read_excel('data/data.xlsx')
 # option = data.columns.values[0]
 
@@ -18,6 +25,7 @@ def get_results_vi(query, vietnamese_model, data):
     results = [data[options[4]][i] for i in top_k_IDs]
     return {"results": results, "score": float(score)}
 
+
 def search_vi(model, index, query, top_k):
     query_vector = model.encode([query])
     top_k = index.search(query_vector, top_k)
@@ -26,8 +34,8 @@ def search_vi(model, index, query, top_k):
     return top_k_ids, top_k[0][0][0]
 
 
-query = input()
-search = get_results_vi(query, vietnamese_model, data)
-result = ",".join(search.get('results'))
-print(result)
-print(len(result))
+# query = input()
+# search = get_results_vi(query, vietnamese_model, data)
+# result = ",".join(search.get('results'))
+# print(result)
+# print(len(result))
