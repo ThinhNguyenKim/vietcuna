@@ -11,8 +11,6 @@ import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, StoppingCriteria, StoppingCriteriaList, TextIteratorStreamer
 
-from create_instruction import create_instruction
-
 # Create the argument parser
 parser = argparse.ArgumentParser()
 

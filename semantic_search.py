@@ -22,7 +22,7 @@ def get_results_vi(query, vietnamese_model, data):
     index = faiss.read_index('data/data.index')
     query = tokenize(query.encode('utf-8').decode('utf-8'))
     top_k_IDs, score = search_vi(vietnamese_model, index, query, 2)
-    results = [data[options[4]][i] for i in top_k_IDs]
+    results = [data[options[1]][i] for i in top_k_IDs]
     return {"results": results, "score": float(score)}
 
 
@@ -32,10 +32,3 @@ def search_vi(model, index, query, top_k):
     top_k_ids = top_k[1].tolist()[0]
     top_k_ids = list(np.unique(top_k_ids))
     return top_k_ids, top_k[0][0][0]
-
-
-# query = input()
-# search = get_results_vi(query, vietnamese_model, data)
-# result = ",".join(search.get('results'))
-# print(result)
-# print(len(result))
