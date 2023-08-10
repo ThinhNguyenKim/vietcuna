@@ -23,7 +23,7 @@ args = parser.parse_args()
 
 if args.model_name == 'vilm/vietcuna-3b':
     model_name = 'vilm/vietcuna-3b'
-elif args.model_name == 'vilm/vietcuna-7b-alpha':
+elif args.model_name == 'vilm/vietcuna-7b':
     model_name = 'vilm/vietcuna-7b-alpha'
 else:
     raise ValueError("Unsupported model_name. Please choose either 'vietcuna-3b' or 'vietcuna-7b'.")

@@ -2,8 +2,8 @@ from abc import abstractmethod
 from typing import List, Optional, Any
 
 from pydantic import BaseSettings
-from payload import TextPayload
-from base_store import BaseStore
+from web_search.payload import TextPayload
+from web_search.base_store import BaseStore
 
 
 class BaseSourceConfig(BaseSettings):

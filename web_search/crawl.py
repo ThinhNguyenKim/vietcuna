@@ -1,4 +1,4 @@
-from website_crawler_source import TrafilaturaCrawlerConfig, TrafilaturaCrawlerSource
+from web_search.website_crawler_source import TrafilaturaCrawlerConfig, TrafilaturaCrawlerSource
 
 def get_website_content(urls):
     

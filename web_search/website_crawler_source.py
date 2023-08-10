@@ -3,8 +3,8 @@ import logging
 from abc import abstractmethod
 from typing import List, Optional, Dict, Any
 import mmh3
-from payload import TextPayload
-from base_source import BaseSource, BaseSourceConfig
+from web_search.payload import TextPayload
+from web_search.base_source import BaseSource, BaseSourceConfig
 
 logger = logging.getLogger(__name__)
 
